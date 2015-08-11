@@ -20,28 +20,39 @@ ConfigWriter.prototype = Object.create(Writer.prototype);
 ConfigWriter.prototype.constructor = ConfigWriter;
 
 ConfigWriter.prototype.setValue = function( data, path, value ) {
-  var i = path.indexOf('.');
-  if (~i) {
-    var key = path.slice(0, i);
-    path = path.slice(i);
-    data = data[key] = data[key] || {};
-    this.setValue(data, path, value);
-  } else {
-    data[path] = value;
+  var parts = path.split('.').map(function( key ) {
+    var val = parseInt(key, 10);
+    return isNaN(val) ? key : val;
+  }), key = parts.shift();
+
+  if (parts.length) {
+
+    if (!data.hasOwnProperty(key)) {
+      data[key] = typeof parts[0] === 'number' ? [] : {};
+    }
+
+    return this.setValue(data[key], parts.join('.'), value);
   }
+
+  data[key] = value;
 };
 
 ConfigWriter.prototype.delKey = function( data, path ) {
-  var i = path.indexOf('.');
-  if (~i) {
-    var key = path.slice(0, i);
-    path = path.slice(i);
-    data = data[key];
-    if (typeof data === 'object') {
-      this.delKey(data, path);
+  var parts = Array.isArray(path) ? path : path.split('.').map(function( key ) {
+    var val = parseInt(key, 10);
+    return isNaN(val) ? key : val;
+  }), key = parts.shift();
+
+  if (data && data.hasOwnProperty(key)) {
+    if (parts.length) {
+      return this.delKey(data[key], parts.join('.'));
     }
-  } else {
-    delete data[path];
+
+    if (typeof key === 'number' && data instanceof Array) {
+      data.splice(key, 1);
+    } else {
+      delete data[key];
+    }
   }
 };
 
@@ -53,6 +64,10 @@ ConfigWriter.prototype.getConfig = function() {
     i;
 
   if (whitelist) {
+    whitelist = whitelist.map(function( key ) {
+      return key.replace(/\[(\d+)\]/g, '.$1');
+    }).sort();
+
     for (i = 0; i < whitelist.length; i++) {
       var key = whitelist[i];
       this.setValue(data, key, selectn(key, config));
@@ -62,6 +77,10 @@ ConfigWriter.prototype.getConfig = function() {
   }
 
   if (blacklist) {
+    blacklist = blacklist.map(function( key ) {
+      return key.replace(/\[(\d+)\]/g, '.$1');
+    }).sort().reverse();
+
     for (i = 0; i < blacklist.length; i++) {
       this.delKey(data, blacklist[i]);
     }

@@ -34,7 +34,11 @@ describe('Broccoli config writer', function() {
   it('includes whitelist', function() {
     var tree = writeConfig('config.json', {
       whitelist: [
-        'a', 'b'
+        'a',
+        'b',
+        'e[1]',
+        'd.x.y',
+        'e[0]'
       ]
     });
 
@@ -46,7 +50,16 @@ describe('Broccoli config writer', function() {
 
       assert.deepEqual(config, {
         a: 1,
-        b: 2
+        b: 2,
+        d: {
+          x: {
+            y: 25
+          }
+        },
+        e: [
+          0,
+          1
+        ]
       });
     });
   });
@@ -54,7 +67,11 @@ describe('Broccoli config writer', function() {
   it('excludes blacklist', function() {
     var tree = writeConfig('config.json', {
       blacklist: [
-        'a'
+        'e[3]',
+        'a',
+        'd.z',
+        'e[1]',
+        'e[0]'
       ]
     });
 
@@ -65,8 +82,16 @@ describe('Broccoli config writer', function() {
         config = require(pathname);
 
       assert.deepEqual(config, {
-        b: 2,
-        c: 3
+        b : 2,
+        c : 3,
+        d : {
+          x : {
+            y : 25
+          }
+        },
+        e : [
+          2
+        ]
       });
     });
   });
