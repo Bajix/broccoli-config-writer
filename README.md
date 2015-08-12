@@ -25,6 +25,8 @@ Supported extensions are `.json` and `.js`, which output JSON files or UMD modul
 
 `options` *{Object}*
 
+Optional. This defaults to your `config.browserConfig` options, and is extended by the passed options. Hence, this can be entirely maintained solely within your config settings.
+
 - `whitelist` *{Array}*
 
 List of paths of config to include. Resolves deeply-nested object properties via dot or bracket-notation, and populates objects as needed. If omitted, clones config.
@@ -49,7 +51,7 @@ Callback function to modify config object directly. Optional.
 // {
 //   "hosts": { ... }
 //   "facebook" { ... },
-//   "browser": [
+//   "browserConfig": [
 //     "hosts",
 //     "facebook.appID",
 //     "facebook.key"
@@ -58,17 +60,14 @@ Callback function to modify config object directly. Optional.
 
 var writeConfig = require('broccoli-config-writer'),
   mergeTrees = require('broccoli-merge-trees'),
-  funnel = require('broccoli-funnel'),
-  config = require('config');
+  funnel = require('broccoli-funnel');
 
 var coreAssets = 'assets';
 
 var vendorAssets = 'vendor';
 
 var assets = mergeTrees([
-  writeConfig('config.js', {
-    whitelist: config.browser
-  }),
+  writeConfig('config.js'),
   vendorAssets,
   coreAssets
 ], {

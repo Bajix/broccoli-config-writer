@@ -7,13 +7,15 @@ var Writer = require('broccoli-writer'),
   util = require('util'),
   fs = require('fs');
 
+config.util.setModuleDefaults('browserConfig', {});
+
 function ConfigWriter( outputFile, options ) {
   if (!(this instanceof ConfigWriter)) {
     return new ConfigWriter(outputFile, options);
   }
 
   this.outputFile = outputFile;
-  this.options = options || {};
+  this.options = config.util.extendDeep({}, config.browserConfig, options);
 }
 
 ConfigWriter.prototype = Object.create(Writer.prototype);
@@ -57,13 +59,13 @@ ConfigWriter.prototype.delKey = function( data, path ) {
 };
 
 ConfigWriter.prototype.getConfig = function() {
-  var whitelist = this.options.whitelist,
+  var whitelist = this.options.whitelist || [],
     blacklist = this.options.blacklist || [],
     filter = this.options.filter,
     data = {},
     i;
 
-  if (whitelist) {
+  if (whitelist.length) {
     whitelist = whitelist.map(function( key ) {
       return key.replace(/\[(\d+)\]/g, '.$1');
     }).sort();
@@ -76,14 +78,13 @@ ConfigWriter.prototype.getConfig = function() {
     util._extend(data, config);
   }
 
-  if (blacklist) {
-    blacklist = blacklist.map(function( key ) {
-      return key.replace(/\[(\d+)\]/g, '.$1');
-    }).sort().reverse();
+  blacklist.push('browserConfig');
+  blacklist = blacklist.map(function( key ) {
+    return key.replace(/\[(\d+)\]/g, '.$1');
+  }).sort().reverse();
 
-    for (i = 0; i < blacklist.length; i++) {
-      this.delKey(data, blacklist[i]);
-    }
+  for (i = 0; i < blacklist.length; i++) {
+    this.delKey(data, blacklist[i]);
   }
 
   if (filter) {

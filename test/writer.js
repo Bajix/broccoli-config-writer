@@ -14,6 +14,7 @@ describe('Broccoli config writer', function() {
         a = util._extend({}, config),
         b = require(pathname);
 
+      delete a.browserConfig;
       assert.deepEqual(a, b);
     });
   });
@@ -27,6 +28,7 @@ describe('Broccoli config writer', function() {
         a = util._extend({}, config),
         b = require(pathname);
 
+      delete a.browserConfig;
       assert.deepEqual(a, b);
     });
   });
