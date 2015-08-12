@@ -1,17 +1,15 @@
-Broccoli Config Writer
-
-[ ![Codeship Status for Bajix/broccoli-config-writer](https://codeship.com/projects/2d89fe70-2230-0133-7c51-52bb0fef976f/status?branch=master)](https://codeship.com/projects/96064)
-------
+# **Broccoli Config Writer**
 
 A broccoli plugin for writing a subset of your [config](https://www.npmjs.com/package/config) settings into an AMD & CommonJS compatible module.
 
 The use case here is to create isomorphic config settings, such that your settings can be maintained a single place, complete with hierarchical overriding to allow for things such as environment specific settings.
 
+[![Version npm](https://img.shields.io/npm/v/broccoli-config-writer.svg?style=flat-square)](https://www.npmjs.com/package/broccoli-config-writer)[![Support via Gratipay](https://img.shields.io/gratipay/Bajix.svg)](https://gratipay.com/Bajix)[![NPM Downloads](https://img.shields.io/npm/dm/broccoli-config-writer.svg?style=flat-square)](https://www.npmjs.com/package/broccoli-config-writer)[![Build Status](https://img.shields.io/codeship/2d89fe70-2230-0133-7c51-52bb0fef976f.svg)](https://codeship.com/projects/96064)[![Dependencies](https://img.shields.io/david/Bajix/broccoli-config-writer.svg?style=flat-square)](https://david-dm.org/Bajix/broccoli-config-writer)
+
 
 ## Install
-From NPM:
 
-> npm install broccoli-config-writer --save
+[![NPM](https://nodei.co/npm/broccoli-object-writer.png?downloads=true&downloadRank=true)](https://nodei.co/npm/broccoli-object-writer/)
 
 ## Documentation
 
@@ -59,8 +57,7 @@ Callback function to modify config object directly. Optional.
 // }
 
 var writeConfig = require('broccoli-config-writer'),
-  mergeTrees = require('broccoli-merge-trees'),
-  funnel = require('broccoli-funnel');
+  mergeTrees = require('broccoli-merge-trees');
 
 var coreAssets = 'assets';
 
@@ -74,7 +71,5 @@ var assets = mergeTrees([
   overwrite: true
 });
 
-module.exports = funnel(assets, {
-  destDir: 'assets'
-});
+module.exports = assets;
 ```
