@@ -59,32 +59,32 @@ ConfigWriter.prototype.delKey = function( data, path ) {
 };
 
 ConfigWriter.prototype.getConfig = function() {
-  var whitelist = this.options.whitelist || [],
-    blacklist = this.options.blacklist || [],
+  var include = this.options.include || [],
+    exclude = this.options.exclude || [],
     filter = this.options.filter,
     data = {},
     i;
 
-  if (whitelist.length) {
-    whitelist = whitelist.map(function( key ) {
+  if (include.length) {
+    include = include.map(function( key ) {
       return key.replace(/\[(\d+)\]/g, '.$1');
     }).sort();
 
-    for (i = 0; i < whitelist.length; i++) {
-      var key = whitelist[i];
+    for (i = 0; i < include.length; i++) {
+      var key = include[i];
       this.setValue(data, key, selectn(key, config));
     }
   } else {
     util._extend(data, config);
   }
 
-  blacklist.push('browserConfig');
-  blacklist = blacklist.map(function( key ) {
+  exclude.push('browserConfig');
+  exclude = exclude.map(function( key ) {
     return key.replace(/\[(\d+)\]/g, '.$1');
   }).sort().reverse();
 
-  for (i = 0; i < blacklist.length; i++) {
-    this.delKey(data, blacklist[i]);
+  for (i = 0; i < exclude.length; i++) {
+    this.delKey(data, exclude[i]);
   }
 
   if (filter) {

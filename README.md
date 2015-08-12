@@ -27,11 +27,11 @@ Supported extensions are `.json` and `.js`, which output JSON files or UMD modul
 
 Optional. This defaults to your `config.browserConfig` options, and is extended by the passed options. Hence, this can be entirely maintained solely within your config settings.
 
-- `whitelist` *{Array}*
+- `include` *{Array}*
 
 List of paths of config to include. Resolves deeply-nested object properties via dot or bracket-notation, and populates objects as needed. If omitted, clones config.
 
-- `blacklist` *{Array}*
+- `exclude` *{Array}*
 
 List of paths of config to exclude. Resolves deeply-nested object properties via dot or bracket-notation, and populates objects as needed
 

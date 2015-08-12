@@ -33,9 +33,9 @@ describe('Broccoli config writer', function() {
     });
   });
 
-  it('includes whitelist', function() {
+  it('includes paths', function() {
     var tree = writeConfig('config.json', {
-      whitelist: [
+      include: [
         'a',
         'b',
         'e[1]',
@@ -66,9 +66,9 @@ describe('Broccoli config writer', function() {
     });
   });
 
-  it('excludes blacklist', function() {
+  it('excludes paths', function() {
     var tree = writeConfig('config.json', {
-      blacklist: [
+      exclude: [
         'e[3]',
         'a',
         'd.z',
