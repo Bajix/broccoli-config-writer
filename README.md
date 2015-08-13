@@ -49,11 +49,13 @@ Callback function to modify config object directly. Optional.
 // {
 //   "hosts": { ... }
 //   "facebook" { ... },
-//   "browserConfig": [
-//     "hosts",
-//     "facebook.appID",
-//     "facebook.key"
-//   ]
+//   "browserConfig" : {
+//     "include" : [
+//       "hosts",
+//       "facebook.appID",
+//       "facebook.key"
+//     ]
+//   }
 // }
 
 var writeConfig = require('broccoli-config-writer'),
