@@ -19,7 +19,6 @@
   "dependencies": {
     "broccoli-writer": "^0.1.1",
     "config": "^1.15.0",
-    "deep-extend": "^0.4.0",
     "rsvp": "^3.0.20",
     "selectn": "^0.9.6",
     "umd-wrap": "^0.1.1"
