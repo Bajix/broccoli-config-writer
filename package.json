@@ -20,7 +20,7 @@
     "broccoli-writer": "^0.1.1",
     "config": "^1.15.0",
     "rsvp": "^3.0.20",
-    "selectn": "^0.9.6",
+    "selectn": "^0.10.0",
     "umd-wrap": "^0.1.1"
   },
   "devDependencies": {
