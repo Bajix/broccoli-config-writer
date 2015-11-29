@@ -20,11 +20,15 @@ function ConfigWriter( outputFile, options ) {
 ConfigWriter.prototype = Object.create(Writer.prototype);
 ConfigWriter.prototype.constructor = ConfigWriter;
 
-ConfigWriter.prototype.setValue = function( data, path, value ) {
+ConfigWriter.prototype.setValue = function( data, path, val ) {
   var parts = path.split('.').map(function( key ) {
     var val = parseInt(key, 10);
     return isNaN(val) ? key : val;
   }), key = parts.shift();
+
+  if (val && typeof val === 'object') {
+    val = this.extendDeep(Array.isArray(val) ? [] : {}, val);
+  }
 
   if (parts.length) {
 
@@ -32,10 +36,10 @@ ConfigWriter.prototype.setValue = function( data, path, value ) {
       data[key] = typeof parts[0] === 'number' ? [] : {};
     }
 
-    return this.setValue(data[key], parts.join('.'), value);
+    return this.setValue(data[key], parts.join('.'), val);
   }
 
-  data[key] = value;
+  data[key] = val;
 };
 
 ConfigWriter.prototype.delKey = function( data, path ) {
