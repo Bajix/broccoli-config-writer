@@ -4,7 +4,6 @@ var Writer = require('broccoli-writer'),
   wrap = require('umd-wrap'),
   RSVP = require('rsvp'),
   path = require('path'),
-  util = require('util'),
   fs = require('fs');
 
 config.util.setModuleDefaults('browserConfig', {});
@@ -58,6 +57,28 @@ ConfigWriter.prototype.delKey = function( data, path ) {
   }
 };
 
+ConfigWriter.prototype.extendDeep = function( origin, add ) {
+  if (!add || typeof add !== 'object') {
+    return origin;
+  }
+
+  var keys = Object.keys(add),
+    i = keys.length;
+
+  while (i--) {
+    var key = keys[i],
+      val = add[key];
+
+    if (val && typeof val === 'object') {
+      origin[key] = this.extendDeep(Array.isArray(val) ? [] : {}, val);
+    } else {
+      origin[key] = val;
+    }
+  }
+
+  return origin;
+};
+
 ConfigWriter.prototype.getConfig = function() {
   var include = this.options.include || [],
     exclude = this.options.exclude || [],
@@ -75,7 +96,7 @@ ConfigWriter.prototype.getConfig = function() {
       this.setValue(data, key, selectn(key, config));
     }
   } else {
-    util._extend(data, config);
+    this.extendDeep(data, config);
   }
 
   exclude.push('browserConfig');
