@@ -1,6 +1,6 @@
 {
   "name": "broccoli-config-writer",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "A Broccoli plugin for writing config modules to be used within the browser",
   "main": "index.js",
   "scripts": {
